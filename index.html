@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>boardemu</title>
+    <link rel="stylesheet" href="./chessground/base.css">
+    <link rel="stylesheet" href="./chessground/theme.css">
+    <link rel="stylesheet" href="./chessground/desktop.css">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="./chessground/chessground.js"></script>
+  </head>
+  <body>
+
+    <div id="container">
+      <div id="board" class="chessground blue merida"></div>
+    </div>
+
+    <script>
+      const onChange = () => {
+        // Called whenever the board changes.
+        // Since we print out on a timer anyway, this doesn't really matter.
+      }
+
+      let ground = Chessground(document.getElementById("board"), {
+        coordinates: false,
+        movable: {
+          free: true,
+          color: "both"
+        },
+        events: {
+          change: onChange
+        }
+      })
+
+      // Get a pointer to the "real" console.
+      let nodeConsole = require('console');
+      let konsole = new nodeConsole.Console(process.stdout, process.stderr);
+
+      const getMask = () => {
+        const pieces = ground.getPieces()
+        let s = "MASK "
+        for (color of [ 'white', 'black' ]) {
+          for (column of 'abcdefgh'.split('')) {
+            for (row of '12345678'.split('')) {
+              const sq = column + row
+              if (pieces[sq] !== undefined && pieces[sq].color === color) {
+                s = s + '1'
+              } else {
+                s = s + '0'
+              }
+            }
+          }
+        }
+        return s
+      }
+
+      setInterval(() => {
+        konsole.log(getMask())
+      }, 1000)
+    </script>
+  </body>
+</html>
