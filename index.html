@@ -14,7 +14,16 @@
   <body>
 
     <div id="container">
-      <div id="board" class="chessground blue merida"></div>
+      <div id="board" style="width: 400px" class="chessground blue merida"></div>
+    <p>
+    <br/>
+    <form>
+      <fieldset>
+        <legend>chessbot</legend>
+      <textarea id = "chessbot"
+                rows = "1"
+                cols = "80" /></textarea>
+      </fieldset>
     </div>
 
     <script>
@@ -24,7 +33,7 @@
       }
 
       let ground = Chessground(document.getElementById("board"), {
-        coordinates: false,
+        coordinates: true,
         movable: {
           free: true,
           color: "both"
@@ -58,7 +67,25 @@
 
       setInterval(() => {
         konsole.log(getMask())
-      }, 1000)
+      }, 250)
+
+      // Send a chat text
+      function getUtteranceMsg(utterance) {
+          let s = "TEXT ";
+	  s = s + utterance;
+	  return s;
+      }
+      function sendBot() {
+	  var utterance = document.getElementById("chessbot").value;
+	  // Clear
+	  konsole.log(getUtteranceMsg(utterance))
+      }
+      document.getElementById("chessbot").addEventListener("keydown", function(e){
+	  if(e.keyCode == 13){sendBot(); clearBot();}
+      });
+      function clearBot() {
+	  document.getElementById("chessbot").value = "";
+      }
     </script>
   </body>
 </html>
