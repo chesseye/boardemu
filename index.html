@@ -25,12 +25,19 @@
                 cols = "80" /></textarea><br/>
       </fieldset>
       <fieldset>
-        <legend>fen</legend>
-      <textarea id = "fen"
+    <legend>current fen:</legend>
+      <textarea id = "current"
+                rows = "1"
+                cols = "80" /></textarea><br/>
+      </fieldset>
+      </fieldset>
+      <fieldset>
+    <legend>new fen:</legend>
+        <textarea id = "fen"
                 rows = "1"
                 cols = "80" /></textarea>
     <button type="button"
-	    onclick="setFen()"><b>set</b></button>
+	    onclick="setNewFen()"><b>set</b></button>
       </fieldset>
     </div>
 
@@ -51,6 +58,8 @@
               change: onChange
           }
       })
+      // Initialize FEN display
+      updateFen();
       // Get a pointer to the "real" console.
       let nodeConsole = require('console');
       let konsole = new nodeConsole.Console(process.stdout, process.stderr);
@@ -74,7 +83,9 @@
       }
 
       setInterval(() => {
-        konsole.log(getMask())
+	  // refresh fen
+	  updateFen();
+          konsole.log(getMask())
       }, 250)
 
       // Send a chat text
@@ -93,9 +104,14 @@
       document.getElementById("chessbot").addEventListener("keyup", function(e){
 	  if(e.keyCode == 13){sendBot(); clearBot();}
       });
-      function setFen() {
+      function setNewFen() {
           var newfen = document.getElementById("fen").value;
 	  ground.set({fen: newfen});
+	  updateFen();
+      }
+      function updateFen() {
+	  var currentfen = ground.getFen();
+	  document.getElementById("current").value = currentfen;
       }
     </script>
   </body>
