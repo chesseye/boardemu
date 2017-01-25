@@ -22,27 +22,35 @@
         <legend>chessbot</legend>
       <textarea id = "chessbot"
                 rows = "1"
+                cols = "80" /></textarea><br/>
+      </fieldset>
+      <fieldset>
+        <legend>fen</legend>
+      <textarea id = "fen"
+                rows = "1"
                 cols = "80" /></textarea>
+    <button type="button"
+	    onclick="setFen()"><b>set</b></button>
       </fieldset>
     </div>
 
     <script>
+      
       const onChange = () => {
         // Called whenever the board changes.
         // Since we print out on a timer anyway, this doesn't really matter.
       }
 
       let ground = Chessground(document.getElementById("board"), {
-        coordinates: true,
-        movable: {
-          free: true,
-          color: "both"
-        },
-        events: {
-          change: onChange
-        }
+	  coordinates: true,
+          movable: {
+              free: true,
+              color: "both"
+          },
+          events: {
+              change: onChange
+          }
       })
-
       // Get a pointer to the "real" console.
       let nodeConsole = require('console');
       let konsole = new nodeConsole.Console(process.stdout, process.stderr);
@@ -85,6 +93,10 @@
       document.getElementById("chessbot").addEventListener("keyup", function(e){
 	  if(e.keyCode == 13){sendBot(); clearBot();}
       });
+      function setFen() {
+          var newfen = document.getElementById("fen").value;
+	  ground.set({fen: newfen});
+      }
     </script>
   </body>
 </html>
