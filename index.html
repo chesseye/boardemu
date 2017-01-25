@@ -77,15 +77,14 @@
       }
       function sendBot() {
 	  var utterance = document.getElementById("chessbot").value;
-	  // Clear
 	  konsole.log(getUtteranceMsg(utterance))
       }
-      document.getElementById("chessbot").addEventListener("keydown", function(e){
-	  if(e.keyCode == 13){sendBot(); clearBot();}
-      });
       function clearBot() {
 	  document.getElementById("chessbot").value = "";
       }
+      document.getElementById("chessbot").addEventListener("keyup", function(e){
+	  if(e.keyCode == 13){sendBot(); clearBot();}
+      });
     </script>
   </body>
 </html>
