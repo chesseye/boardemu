@@ -25,19 +25,16 @@
                 cols = "80" /></textarea><br/>
       </fieldset>
       <fieldset>
-    <legend>current fen:</legend>
-      <textarea id = "current"
-                rows = "1"
-                cols = "80" /></textarea><br/>
-      </fieldset>
-      </fieldset>
-      <fieldset>
-    <legend>new fen:</legend>
+    <legend>position</legend>
         <textarea id = "fen"
                 rows = "1"
                 cols = "80" /></textarea>
     <button type="button"
-	    onclick="setNewFen()"><b>set</b></button>
+	    onclick="setNewFen()"><b>set</b></button><br/>
+    <button type="button"
+	    onclick="initialBoard()"><b>initial</b></button>
+    <button type="button"
+	    onclick="emptyBoard()"><b>empty</b></button>
       </fieldset>
     </div>
 
@@ -59,6 +56,7 @@
           }
       })
       // Initialize FEN display
+      let previousfen = ground.getFen()
       updateFen();
       // Get a pointer to the "real" console.
       let nodeConsole = require('console');
@@ -84,7 +82,7 @@
 
       setInterval(() => {
 	  // refresh fen
-	  updateFen();
+	  refreshFen();
           konsole.log(getMask())
       }, 250)
 
@@ -104,14 +102,31 @@
       document.getElementById("chessbot").addEventListener("keyup", function(e){
 	  if(e.keyCode == 13){sendBot(); clearBot();}
       });
+      // Set up and maintain FEN position
       function setNewFen() {
           var newfen = document.getElementById("fen").value;
 	  ground.set({fen: newfen});
 	  updateFen();
       }
+      function updateCurrentFen(fen) {
+          previousfen = fen;
+      }
       function updateFen() {
-	  var currentfen = ground.getFen();
-	  document.getElementById("current").value = currentfen;
+          var newfen = ground.getFen();
+          updateCurrentFen(newfen);
+          document.getElementById("fen").value = newfen;
+      }
+      function refreshFen() {
+          var currentfen = ground.getFen();
+          if (!(currentfen == previousfen)) {
+            updateFen();
+          }
+      }
+      function initialBoard() {
+        ground.set({fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'});
+      }
+      function emptyBoard() {
+        ground.set({fen: '8/8/8/8/8/8/8/8/8'});
       }
     </script>
   </body>
